@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ro" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opere | Mircea Eliade, 1907-1986</title>
+<meta name="description" content="Bibliografie de 23 de titluri: istoriile religiilor, romanele și jurnalele lui Mircea Eliade, cu datele primei publicări.">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+<script>
+(function () {
+  try {
+    var stored = localStorage.getItem('eliade-theme');
+    if (!stored) {
+      stored = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', stored);
+  } catch (e) { /* default light */ }
+  try {
+    if ('IntersectionObserver' in window &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('js');
+      // Safety net: if the main script never initialises, drop the class
+      // again so all content stays visible.
+      window.setTimeout(function () {
+        if (!window.__eliadeRevealReady) {
+          document.documentElement.classList.remove('js');
+        }
+      }, 1500);
+    }
+  } catch (e) { /* leave content visible */ }
+})();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Sari la conținut</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <span class="brand-name">Mircea Eliade</span>
+      <span class="brand-years">1907-1986</span>
+    </a>
+    <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Meniu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Principal">
+      <ul class="nav-list">
+        <li><a href="index.html">Prezentare</a></li>
+        <li><a href="biography.html">Biografie</a></li>
+        <li><a href="ideas.html">Idei-cheie</a></li>
+        <li><a href="works.html" aria-current="page">Opere</a></li>
+      </ul>
+      <button class="theme-toggle" id="theme-toggle" type="button">Întunecat</button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head" aria-labelledby="works-title">
+    <div class="wrap">
+      <h1 id="works-title" data-reveal>Opere</h1>
+      <p class="dek" data-reveal>Istorii ale religiilor, romane și jurnale, cu datele primei publicări și cu titlurile originale acolo unde diferă.</p>
+
+      <div class="filters" role="group" aria-label="Filtrează lista după tipul lucrării" data-reveal>
+        <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">Toate</button>
+        <button class="filter-btn" type="button" data-filter="religion" aria-pressed="false">Istorii ale religiilor</button>
+        <button class="filter-btn" type="button" data-filter="fiction" aria-pressed="false">Ficțiune</button>
+        <button class="filter-btn" type="button" data-filter="memoir" aria-pressed="false">Memorii și jurnale</button>
+      </div>
+      <p class="filter-status" id="works-status" role="status" aria-live="polite">Se afișează 23 din 23 de titluri.</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="works-grid is-odd" id="works-grid" data-reveal>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1949</span><span class="tag">Religie</span></div>
+        <h3>Mitul eternei reîntoarceri</h3>
+        <p class="w-orig">Le Mythe de l'éternel retour</p>
+        <p class="w-note">Cum desființează societățile arhaice timpul profan, repetând faptele primordiale ale zeilor. Ediția engleză a apărut și ca Cosmos and History.</p>
+      </article>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1949</span><span class="tag">Religie</span></div>
+        <h3>Tratat de istorie a religiilor</h3>
+        <p class="w-orig">Traité d'histoire des religions</p>
+        <p class="w-note">Harta fondatoare a metodei sale: sacrul citit în cer, apă, piatră, lună și vegetație.</p>
+      </article>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1951</span><span class="tag">Religie</span></div>
+        <h3>Șamanismul și tehnicile arhaice ale extazului</h3>
+        <p class="w-orig">Le Chamanisme et les techniques archaïques de l'extase</p>
+        <p class="w-note">Studiul care a făcut din extaz o categorie centrală a istoriei religiilor. Ediția engleză, 1964.</p>
+      </article>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1954</span><span class="tag">Religie</span></div>
+        <h3>Yoga. Nemurire și libertate</h3>
+        <p class="w-orig">Le Yoga. Immortalité et liberté</p>
+        <p class="w-note">Yoga și tantrismul ca tehnici de eliberare din lumea condiționată. Ediția engleză, 1958.</p>
+      </article>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1956</span><span class="tag">Religie</span></div>
+        <h3>Fierari și alchimiști</h3>
+        <p class="w-orig">Forgerons et alchimistes</p>
+        <p class="w-note">Alchimia și metalurgia ca tehnici spirituale, de la focul fierarului la piatra filosofală. Ediția engleză, 1962.</p>
+      </article>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1957</span><span class="tag">Religie</span></div>
+        <h3>Sacrul și profanul</h3>
+        <p class="w-orig">Das Heilige und das Profane</p>
+        <p class="w-note">Scurta și celebra introducere în cele două moduri de a fi în lume, locul de unde se începe de obicei.</p>
+      </article>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1958</span><span class="tag">Religie</span></div>
+        <h3>Nașteri și renașteri</h3>
+        <p class="w-orig">Birth and Rebirth</p>
+        <p class="w-note">Inițierea ca moarte simbolică și regenerare, de la riturile tribale la mistere și societăți secrete. A apărut și ca Rites and Symbols of Initiation.</p>
+      </article>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1952</span><span class="tag">Religie</span></div>
+        <h3>Imagini și simboluri</h3>
+        <p class="w-orig">Images et symboles</p>
+        <p class="w-note">Studii despre simbol, de la scoică și perlă la centrul lumii. Ediția engleză, 1961.</p>
+      </article>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1963</span><span class="tag">Religie</span></div>
+        <h3>Aspecte ale mitului</h3>
+        <p class="w-orig">Aspects du mythe</p>
+        <p class="w-note">Ce face mitul în culturile vii și de ce politica modernă se comportă și astăzi mitic.</p>
+      </article>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1976-1983</span><span class="tag">Religie</span></div>
+        <h3>Istoria credințelor și ideilor religioase, trei volume</h3>
+        <p class="w-orig">Histoire des idées religieuses</p>
+        <p class="w-note">Sinteza sa târzie a întregului domeniu, din epoca de piatră până în zorii modernității.</p>
+      </article>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1976</span><span class="tag">Religie</span></div>
+        <h3>Ocultism, vrăjitorie și mode culturale</h3>
+        <p class="w-note">Eseuri despre de ce cultura modernă revine mereu la teme oculte, inițiatice și ezoterice.</p>
+      </article>
+
+      <article class="work" data-cat="religion">
+        <div class="work-meta"><span class="w-year">1987</span><span class="tag">Religie</span></div>
+        <h3>The Encyclopedia of Religion, șaisprezece volume</h3>
+        <p class="w-note">Lucrarea de referință standard a domeniului, coordonată de el până la moarte și apărută un an mai târziu.</p>
+      </article>
+
+      <article class="work" data-cat="fiction">
+        <div class="work-meta"><span class="w-year">1930</span><span class="tag">Ficțiune</span></div>
+        <h3>Isabel și apele diavolului</h3>
+        <p class="w-note">Primul său roman: o confesiune febrilă a dorinței și a îndoielii.</p>
+      </article>
+
+      <article class="work" data-cat="fiction">
+        <div class="work-meta"><span class="w-year">1933</span><span class="tag">Ficțiune</span></div>
+        <h3>Maitreyi</h3>
+        <p class="w-note">Romanul autobiografic al iubirii sale din Calcutta. Eroina sa i-a răspuns în propriile memorii, patruzeci de ani mai târziu. Ediția engleză: Bengal Nights.</p>
+      </article>
+
+      <article class="work" data-cat="fiction">
+        <div class="work-meta"><span class="w-year">1936</span><span class="tag">Ficțiune</span></div>
+        <h3>Domnișoara Christina</h3>
+        <p class="w-note">Un roman gotic despre o bântuire de la un conac de țară.</p>
+      </article>
+
+      <article class="work" data-cat="fiction">
+        <div class="work-meta"><span class="w-year">1938</span><span class="tag">Ficțiune</span></div>
+        <h3>Nuntă în cer</h3>
+        <p class="w-note">Cel mai cerebral roman de dragoste al său: un triunghi care se îndreaptă spre o nuntă mistică.</p>
+      </article>
+
+      <article class="work" data-cat="fiction">
+        <div class="work-meta"><span class="w-year">1955</span><span class="tag">Ficțiune</span></div>
+        <h3>Noaptea de Sânziene</h3>
+        <p class="w-note">Romanul exilului, scris la Paris: destinul unui om și o iubire pierdută, întinse peste două războaie.</p>
+      </article>
+
+      <article class="work" data-cat="fiction">
+        <div class="work-meta"><span class="w-year">1976</span><span class="tag">Ficțiune</span></div>
+        <h3>Tinerețe fără tinerețe</h3>
+        <p class="w-note">O nuvelă despre vârstă, memorie și timp, ecranizată de Francis Ford Coppola în 2007.</p>
+      </article>
+
+      <article class="work" data-cat="fiction">
+        <div class="work-meta"><span class="w-year">1977</span><span class="tag">Ficțiune</span></div>
+        <h3>Pe strada Mântuleasa</h3>
+        <p class="w-note">Un interogatoriu fără sfârșit: amintirile unui profesor, puse sub semnul întrebării de funcționari care nu le pot înțelege.</p>
+      </article>
+
+      <article class="work" data-cat="memoir">
+        <div class="work-meta"><span class="w-year">1981</span><span class="tag">Memorii</span></div>
+        <h3>Memorii, vol. I: 1907-1937</h3>
+        <p class="w-note">Bucureștiul și India, în propria versiune a autorului, scrisă cu memoria romancierului. Ediția engleză: Journey East, Journey West.</p>
+      </article>
+
+      <article class="work" data-cat="memoir">
+        <div class="work-meta"><span class="w-year">1988</span><span class="tag">Memorii</span></div>
+        <h3>Memorii, vol. II: 1937-1960</h3>
+        <p class="w-note">Exilul: anii războiului, Lisabona, Paris și mutarea la Chicago. Ediția engleză, Exile's Odyssey, a apărut după moartea sa.</p>
+      </article>
+
+      <article class="work" data-cat="memoir">
+        <div class="work-meta"><span class="w-year">2006</span><span class="tag">Jurnal</span></div>
+        <h3>Jurnalul portughez</h3>
+        <p class="w-note">Jurnalul de război ținut la Lisabona ca atașat cultural. Publicat în română în 2006; în engleză, ca The Portugal Journal, în 2010.</p>
+      </article>
+
+      <article class="work" data-cat="memoir">
+        <div class="work-meta"><span class="w-year">1945-1985</span><span class="tag">Jurnal</span></div>
+        <h3>Jurnal</h3>
+        <p class="w-note">Însemnarea zilnică ținută timp de patru decenii, la Paris și Chicago, publicată după moartea sa.</p>
+      </article>
+
+    </div>
+    <p class="works-empty" id="works-empty" hidden>Niciun titlu în această categorie.</p>
+
+    <div class="works-note" data-reveal>
+      <h2>Despre această listă</h2>
+      <p>Datele sunt cele ale primei publicări. Acolo unde o ediție în altă limbă a apărut înaintea celei românești, nota o spune. La jurnale, datele arată anii pe care îi acoperă însemnările. Titlurile originale sunt date așa cum au apărut prima dată.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <p class="foot-brand">Mircea Eliade, 1907-1986</p>
+        <p class="foot-note">Un ghid de lectură independent despre viața și opera istoricului român al religiilor, alcătuit din surse biografice și bibliografice publicate.</p>
+      </div>
+      <div>
+        <p class="foot-head">Pagini</p>
+        <ul class="foot-list">
+          <li><a href="index.html">Prezentare</a></li>
+          <li><a href="biography.html">Biografie</a></li>
+          <li><a href="ideas.html">Idei-cheie</a></li>
+          <li><a href="works.html">Opere</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="foot-head">Despre listă</p>
+        <ul class="credits">
+          <li>Alcătuită din intrări bibliografice standard pentru edițiile românești, franceze și engleze ale lui Eliade. Este un ghid de lectură, nu o bibliografie științifică.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js" defer></script>
+</body>
+</html>
