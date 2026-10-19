@@ -1,0 +1,1132 @@
+/* ==========================================================================
+   Mircea Eliade, reading guide
+   Plain CSS. No framework, no build step.
+
+   Design notes
+   - Editorial / archival direction: warm paper canvas, one accent (quiet
+     ink blue), serif display type, restrained motion (short fade-and-rise
+     on scroll, disabled under prefers-reduced-motion).
+   - One corner radius system: 3px for cards, images, buttons and inputs.
+     The only exception is the small category tag, which is a full pill,
+     documented here on purpose.
+   - Light and dark themes share one token set; the theme flips on the
+     html[data-theme] attribute.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Tokens
+   -------------------------------------------------------------------------- */
+
+:root {
+  --font-serif: 'EB Garamond', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-sans: 'Public Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  /* warm light */
+  --paper: #F6F3ED;
+  --surface: #FBF9F5;
+  --ink: #201E1A;
+  --ink-2: #5A554C;
+  --ink-3: #6E675B;
+  --line: #E3DCD0;
+  --accent: #2C4A68;
+  --accent-hover: #1E344C;
+  --accent-soft: #E6EDF4;
+  --tag-bg: #E6EDF4;
+  --tag-ink: #2C4A68;
+  --btn-bg: #201E1A;
+  --btn-ink: #FBF9F5;
+  --btn-bg-hover: #38332B;
+  --head-bg: rgba(246, 243, 237, 0.88);
+
+  --radius: 3px;
+  --pill: 999px;
+  --w: 1140px;
+  --gutter: clamp(1.15rem, 4vw, 2.5rem);
+  --sect: clamp(4rem, 8.5vw, 7.5rem);
+}
+
+html[data-theme='dark'] {
+  --paper: #161410;
+  --surface: #1D1B15;
+  --ink: #EDE7DB;
+  --ink-2: #B3AB9C;
+  --ink-3: #8D8677;
+  --line: #2C2922;
+  --accent: #A9C6E0;
+  --accent-hover: #C9DCED;
+  --accent-soft: #1E2833;
+  --tag-bg: #1E2833;
+  --tag-ink: #A9C6E0;
+  --btn-bg: #EDE7DB;
+  --btn-ink: #1A1813;
+  --btn-bg-hover: #D6CFC0;
+  --head-bg: rgba(22, 20, 16, 0.88);
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset and base
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  font-kerning: normal;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+figure { margin: 0; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  line-height: 1.12;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p { margin: 0; }
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+a:hover { color: var(--accent-hover); }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   3. Small type helpers
+   -------------------------------------------------------------------------- */
+
+.label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+.muted { color: var(--ink-2); }
+
+.tag {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--pill);
+  background: var(--tag-bg);
+  color: var(--tag-ink);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   4. Layout
+   -------------------------------------------------------------------------- */
+
+.wrap {
+  max-width: var(--w);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section { padding-block: var(--sect); }
+
+.section-tight { padding-block: calc(var(--sect) * 0.62); }
+
+.stack > * + * { margin-top: var(--stack-gap, 1rem); }
+
+.measure { max-width: 64ch; }
+
+.measure-narrow { max-width: 52ch; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--line);
+  z-index: 40;
+}
+
+.skip-link:focus { left: 1rem; top: 1rem; }
+
+/* --------------------------------------------------------------------------
+   5. Header and navigation
+   -------------------------------------------------------------------------- */
+
+.site-head {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--head-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.site-head .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 66px;
+}
+
+.brand {
+  text-decoration: none;
+  color: var(--ink);
+  line-height: 1.1;
+  display: block;
+  padding-block: 0.55rem;
+}
+
+.brand-name {
+  font-family: var(--font-serif);
+  font-size: 1.14rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  display: block;
+}
+
+.brand-years {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--ink-3);
+  margin-top: 0.28em;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list a {
+  font-size: 0.86rem;
+  color: var(--ink-2);
+  text-decoration: none;
+  padding-block: 0.35rem;
+}
+
+.nav-list a:hover { color: var(--ink); }
+
+.nav-list a[aria-current='page'] {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.4em;
+}
+
+.theme-toggle {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  color: var(--ink);
+  border-color: var(--ink-3);
+}
+
+.nav-toggle {
+  display: none;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+}
+
+@media (max-width: 880px) {
+  .nav-toggle { display: inline-block; }
+
+  .site-nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 1rem var(--gutter) 1.35rem;
+  }
+
+  .site-head.is-open .site-nav { display: flex; }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    width: 100%;
+  }
+
+  .nav-list a {
+    display: block;
+    width: 100%;
+    padding-block: 0.55rem;
+    font-size: 1rem;
+  }
+
+  .theme-toggle { margin-top: 0.75rem; }
+}
+
+/* --------------------------------------------------------------------------
+   6. Hero (home)
+   -------------------------------------------------------------------------- */
+
+.hero {
+  padding-top: clamp(2.5rem, 5vw, 4rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.hero .wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.hero-title {
+  font-size: clamp(2.9rem, 6.6vw, 4.9rem);
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+.hero-title .hero-role {
+  display: block;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.42em;
+  letter-spacing: -0.005em;
+  line-height: 1.25;
+  color: var(--ink-2);
+  margin-top: 0.5em;
+  padding-bottom: 0.06em;
+}
+
+.hero-sub {
+  margin-top: 1.5rem;
+  max-width: 46ch;
+  font-size: 1.06rem;
+  color: var(--ink-2);
+}
+
+.hero-cta {
+  margin-top: 2.1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--btn-ink);
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-bg);
+  border-radius: var(--radius);
+  padding: 0.78rem 1.35rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: var(--btn-bg-hover);
+  border-color: var(--btn-bg-hover);
+  color: var(--btn-ink);
+}
+
+.btn:active { transform: translateY(1px); }
+
+.link-plain {
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+.hero-figure { justify-self: end; }
+
+.hero-figure img {
+  width: min(100%, 380px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.hero-figure figcaption {
+  margin-top: 0.85rem;
+  max-width: 380px;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+@media (max-width: 880px) {
+  .hero .wrap { grid-template-columns: 1fr; }
+
+  .hero-figure {
+    justify-self: start;
+    order: 2;
+  }
+
+  .hero-figure img { width: min(100%, 320px); }
+}
+
+/* --------------------------------------------------------------------------
+   7. Section headers (stacked, never split)
+   -------------------------------------------------------------------------- */
+
+.sect-head { display: block; }
+
+.sect-head h2 {
+  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+  letter-spacing: -0.015em;
+}
+
+.sect-head .sect-note {
+  margin-top: 1rem;
+  max-width: 58ch;
+  color: var(--ink-2);
+  font-size: 0.98rem;
+}
+
+.sect-more { margin-top: 2.25rem; }
+
+/* --------------------------------------------------------------------------
+   8. Bento (home, "At a glance")
+   -------------------------------------------------------------------------- */
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.bento-cell {
+  background: var(--paper);
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  min-width: 0;
+}
+
+.bento-cell--tint { background: var(--accent-soft); }
+
+.bento-cell--picture {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.bento-cell--picture img {
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--line);
+}
+
+.bento-cell--picture figcaption {
+  padding: 0.9rem 1.2rem 1rem;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+.cell-5 { grid-column: span 5; }
+.cell-3 { grid-column: span 3; }
+.cell-4 { grid-column: span 4; }
+.cell-8 { grid-column: span 8; }
+.cell-12 { grid-column: span 12; }
+.cell-rows-2 { grid-row: span 2; }
+
+.fact-num {
+  font-family: var(--font-serif);
+  font-size: clamp(1.9rem, 4vw, 2.7rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  margin: 0.55rem 0 0;
+}
+
+.fact-num small {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 0.7rem;
+}
+
+.fact-note {
+  margin-top: 0.9rem;
+  font-size: 0.92rem;
+  color: var(--ink-2);
+  max-width: 44ch;
+}
+
+@media (max-width: 880px) {
+  .bento { grid-template-columns: 1fr; }
+
+  .bento-cell { grid-column: auto; grid-row: auto; }
+}
+
+/* --------------------------------------------------------------------------
+   9. Idea cards (home preview)
+   -------------------------------------------------------------------------- */
+
+.idea-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.75rem, 4vw, 3rem) clamp(2rem, 5vw, 4rem);
+  margin-top: 2.75rem;
+}
+
+.idea-card {
+  border-top: 1px solid var(--line);
+  padding-top: 1.4rem;
+}
+
+.idea-card h3 {
+  font-size: 1.32rem;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.idea-card p {
+  margin-top: 0.65rem;
+  font-size: 0.95rem;
+  color: var(--ink-2);
+  max-width: 46ch;
+}
+
+@media (max-width: 760px) {
+  .idea-grid { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   10. Quote band
+   -------------------------------------------------------------------------- */
+
+.quote-band {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding-block: clamp(3.5rem, 8vw, 6.5rem);
+}
+
+.quote-band blockquote {
+  margin: 0;
+  max-width: 40ch;
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3.6vw, 2.35rem);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  padding-bottom: 0.05em;
+}
+
+.quote-band blockquote p { margin: 0; }
+
+.quote-band cite {
+  display: block;
+  margin-top: 1.6rem;
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* --------------------------------------------------------------------------
+   11. Works preview list (home)
+   -------------------------------------------------------------------------- */
+
+.work-preview {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.75rem, 4vw, 2.75rem) clamp(2rem, 5vw, 4rem);
+  margin-top: 2.5rem;
+}
+
+.work-item h3 {
+  font-size: 1.22rem;
+  letter-spacing: -0.005em;
+}
+
+.work-item .w-year {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 0.55rem;
+}
+
+.work-item p {
+  margin-top: 0.45rem;
+  font-size: 0.93rem;
+  color: var(--ink-2);
+  max-width: 48ch;
+}
+
+@media (max-width: 760px) {
+  .work-preview { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   12. Label rows ("Where to start")
+   -------------------------------------------------------------------------- */
+
+.start-rows { margin-top: 2.25rem; }
+
+.start-row {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  border-top: 1px solid var(--line);
+  padding-block: 1.5rem;
+  align-items: baseline;
+}
+
+.start-row h3 {
+  font-size: 1.18rem;
+  letter-spacing: -0.005em;
+}
+
+.start-row p {
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+  color: var(--ink-2);
+  max-width: 58ch;
+}
+
+@media (max-width: 760px) {
+  .start-row { grid-template-columns: 1fr; gap: 0.5rem; }
+}
+
+/* --------------------------------------------------------------------------
+   13. Page heads (interior pages)
+   -------------------------------------------------------------------------- */
+
+.page-head { padding-top: clamp(2.75rem, 6vw, 4.5rem); }
+
+.page-head h1 {
+  font-size: clamp(2.3rem, 5.4vw, 3.6rem);
+  letter-spacing: -0.02em;
+}
+
+.page-head .dek {
+  margin-top: 1.1rem;
+  max-width: 58ch;
+  font-size: 1.05rem;
+  color: var(--ink-2);
+}
+
+/* --------------------------------------------------------------------------
+   14. Biography timeline
+   -------------------------------------------------------------------------- */
+
+.rail { margin-top: clamp(2.5rem, 6vw, 4rem); }
+
+.chapter {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: clamp(1rem, 3.5vw, 3rem);
+  border-top: 1px solid var(--line);
+  padding-block: clamp(2.25rem, 5vw, 3.75rem);
+}
+
+.chapter-year {
+  position: sticky;
+  top: 92px;
+  align-self: start;
+}
+
+.chapter-year .label { line-height: 1.7; }
+
+.chapter h2 {
+  font-size: clamp(1.45rem, 2.8vw, 1.95rem);
+  letter-spacing: -0.012em;
+}
+
+.chapter-body > * + * { margin-top: 1rem; }
+
+.chapter-body p {
+  max-width: 66ch;
+  color: var(--ink);
+}
+
+.chapter-body p + p { margin-top: 1rem; }
+
+.chapter-figure {
+  margin-top: 1.75rem;
+  max-width: 460px;
+}
+
+.chapter-figure img {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.chapter-figure figcaption {
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+.legacy-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  align-items: start;
+}
+
+.legacy-split h2 {
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  letter-spacing: -0.015em;
+}
+
+.legacy-split .legacy-text { margin-top: 1.5rem; }
+
+.legacy-split .legacy-text p + p { margin-top: 1rem; max-width: 62ch; }
+
+.legacy-figures {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.legacy-figures img {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.legacy-figures figcaption {
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+@media (max-width: 880px) {
+  .chapter { grid-template-columns: 1fr; gap: 0.9rem; }
+
+  .chapter-year { position: static; }
+
+  .legacy-split { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   15. Ideas page
+   -------------------------------------------------------------------------- */
+
+.band-figure { margin-top: clamp(2rem, 4vw, 3rem); }
+
+.band-figure img {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  object-fit: cover;
+}
+
+.band-figure figcaption {
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+.term-index {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1.4rem;
+  padding-block: 1.25rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.term-index a {
+  font-size: 0.84rem;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.term-index a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: clamp(1rem, 3.5vw, 3rem);
+  border-top: 1px solid var(--line);
+  padding-block: clamp(1.9rem, 4vw, 3rem);
+}
+
+.entry-side {
+  position: sticky;
+  top: 92px;
+  align-self: start;
+}
+
+.entry-side h2 {
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.entry-side .label { margin-top: 0.65rem; }
+
+.entry-body p { max-width: 68ch; }
+
+.entry-body p + p { margin-top: 0.85rem; }
+
+.entry-body .src {
+  margin-top: 1.15rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
+}
+
+@media (max-width: 880px) {
+  .entry { grid-template-columns: 1fr; gap: 0.9rem; }
+
+  .entry-side { position: static; }
+}
+
+/* --------------------------------------------------------------------------
+   16. Works page
+   -------------------------------------------------------------------------- */
+
+.filters {
+  margin-top: clamp(2rem, 4vw, 2.75rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.85rem;
+  cursor: pointer;
+}
+
+.filter-btn:hover {
+  color: var(--ink);
+  border-color: var(--ink-3);
+}
+
+.filter-btn[aria-pressed='true'] {
+  background: var(--btn-bg);
+  border-color: var(--btn-bg);
+  color: var(--btn-ink);
+}
+
+.filter-status {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--ink-3);
+}
+
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 1.25rem;
+}
+
+/* When the visible number of titles is odd, the last row ends on an empty
+   half-cell and the hairline background would show through as a block.
+   A paper-coloured filler cell masks it. Ignored in the single-column
+   layout, where every row is full. */
+@media (min-width: 761px) {
+  .works-grid.is-odd::after {
+    content: "";
+    background: var(--paper);
+  }
+}
+
+.work {
+  background: var(--paper);
+  padding: clamp(1.35rem, 2.6vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.work[hidden] { display: none; }
+
+.work-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.work-meta .w-year {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.work h3 {
+  font-size: 1.24rem;
+  letter-spacing: -0.005em;
+}
+
+.work .w-orig {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ink-3);
+}
+
+.work .w-note {
+  font-size: 0.92rem;
+  color: var(--ink-2);
+}
+
+.works-empty {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: var(--ink-2);
+  font-size: 0.95rem;
+  background: var(--paper);
+}
+
+.works-note {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+  max-width: 64ch;
+}
+
+.works-note h2 {
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+.works-note p {
+  margin-top: 0.7rem;
+  font-size: 0.9rem;
+  color: var(--ink-2);
+}
+
+@media (max-width: 760px) {
+  .works-grid { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   17. Footer
+   -------------------------------------------------------------------------- */
+
+.site-foot {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  margin-top: var(--sect);
+  padding-block: clamp(2.75rem, 5vw, 4rem) clamp(2.5rem, 4vw, 3rem);
+}
+
+.foot-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.7fr) minmax(0, 1.1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.foot-brand {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.foot-note {
+  margin-top: 0.85rem;
+  max-width: 40ch;
+  font-size: 0.86rem;
+  color: var(--ink-2);
+}
+
+.foot-head {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 0.9rem;
+}
+
+.foot-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.foot-list li + li { margin-top: 0.45rem; }
+
+.foot-list a {
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.foot-list a:hover { color: var(--accent); text-decoration: underline; }
+
+.credits {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+.credits li + li { margin-top: 0.5rem; }
+
+@media (max-width: 880px) {
+  .foot-grid { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   18. Scroll reveal (subtle, opt-in, disabled without JS or with reduced motion)
+   -------------------------------------------------------------------------- */
+
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+html.js [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   19. Print
+   -------------------------------------------------------------------------- */
+
+@media print {
+  .site-head,
+  .skip-link,
+  .hero-cta,
+  .filters,
+  .filter-status,
+  .sect-more { display: none; }
+
+  body { background: #fff; color: #111; }
+
+  a { color: #111; text-decoration: none; }
+
+  .quote-band { border: 0; background: #fff; }
+}
